@@ -1,0 +1,151 @@
+<template>
+  <div>
+    <p id="player">Player {{ player }} の番です</p>
+    <div id="board">
+      <template v-for="(rows, i) in ticTacToeBoardValue">
+        <TicTacToeCell
+          :value="cell"
+          v-for="(cell, j) in rows"
+          :key="i * 3 + j"
+          :index="i * 3 + j"
+          @click="click"
+        />
+      </template>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import TicTacToeCell from "./TicTacToeCell.vue";
+
+export default Vue.extend({
+  name: "TicTacToeBoard",
+  components: {
+    TicTacToeCell,
+  },
+  data: function () {
+    return {
+      ticTacToeBoardValue: [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+      ],
+      player: 1,
+    };
+  },
+  methods: {
+    async click(index: number) {
+      this.putBoard(index);
+      this.changePlayer();
+
+      console.log(this.$el.textContent);
+      await this.$nextTick();
+      console.log(this.$el.textContent);
+
+      if (this.isFinishedGame()) {
+        alert("終了です");
+        this.resetGame();
+      }
+    },
+    changePlayer() {
+      this.player = this.player === 1 ? 2 : 1;
+    },
+    putBoard(index: number) {
+      const newTicTacToeBoardValue = this.ticTacToeBoardValue.slice();
+      const columNum = index % 3;
+      const rowNum = Math.floor(index / 3);
+      newTicTacToeBoardValue[rowNum][columNum] = this.player;
+      this.ticTacToeBoardValue = newTicTacToeBoardValue;
+    },
+    isFinishedGame() {
+      if (this.isFilledBoard()) {
+        return true;
+      }
+
+      if (
+        this.ticTacToeBoardValue[0][0] &&
+        this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[0][1] &&
+        this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[0][2]
+      ) {
+        return true;
+      } else if (
+        this.ticTacToeBoardValue[1][0] &&
+        this.ticTacToeBoardValue[1][0] === this.ticTacToeBoardValue[1][1] &&
+        this.ticTacToeBoardValue[1][0] === this.ticTacToeBoardValue[1][2]
+      ) {
+        return true;
+      } else if (
+        this.ticTacToeBoardValue[2][0] &&
+        this.ticTacToeBoardValue[2][0] === this.ticTacToeBoardValue[2][1] &&
+        this.ticTacToeBoardValue[2][0] === this.ticTacToeBoardValue[2][2]
+      ) {
+        return true;
+      }
+
+      if (
+        this.ticTacToeBoardValue[0][0] &&
+        this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[1][0] &&
+        this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[2][0]
+      ) {
+        return true;
+      } else if (
+        this.ticTacToeBoardValue[0][1] &&
+        this.ticTacToeBoardValue[0][1] === this.ticTacToeBoardValue[1][1] &&
+        this.ticTacToeBoardValue[0][1] === this.ticTacToeBoardValue[2][1]
+      ) {
+        return true;
+      } else if (
+        this.ticTacToeBoardValue[0][2] &&
+        this.ticTacToeBoardValue[0][2] === this.ticTacToeBoardValue[1][2] &&
+        this.ticTacToeBoardValue[0][2] === this.ticTacToeBoardValue[2][2]
+      ) {
+        return true;
+      }
+
+      if (
+        this.ticTacToeBoardValue[0][0] &&
+        this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[1][1] &&
+        this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[2][2]
+      ) {
+        return true;
+      } else if (
+        this.ticTacToeBoardValue[0][2] &&
+        this.ticTacToeBoardValue[0][2] === this.ticTacToeBoardValue[1][1] &&
+        this.ticTacToeBoardValue[0][2] === this.ticTacToeBoardValue[2][0]
+      ) {
+        return true;
+      }
+
+      return false;
+    },
+    isFilledBoard() {
+      return this.ticTacToeBoardValue.every((rows) =>
+        rows.every((cell) => cell)
+      );
+    },
+    resetGame() {
+      this.ticTacToeBoardValue = [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+      ];
+    },
+  },
+});
+</script>
+
+<style scoped>
+#board {
+  display: grid;
+  margin: 0px auto;
+  width: 600px;
+  height: 600px;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+#player {
+  font-size: 24px;
+}
+</style>

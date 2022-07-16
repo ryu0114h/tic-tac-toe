@@ -1,6 +1,6 @@
 <template>
   <span class="cell" v-if="value === 1">◯</span>
-  <span class="cell" v-else-if="value === -1">✖️</span>
+  <span class="cell" v-else-if="value === 2">✖️</span>
   <span class="cell" @click="click" v-else></span>
 </template>
 
