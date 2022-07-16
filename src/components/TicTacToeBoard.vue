@@ -8,10 +8,13 @@
           v-for="(cell, j) in rows"
           :key="i * 3 + j"
           :index="i * 3 + j"
-          @click="click"
+          @click="isFinishedGame() ? null : click($event)"
         />
       </template>
     </div>
+    <el-button id="button" type="primary" size="medium" @click="resetGame"
+      >リセット</el-button
+    >
   </div>
 </template>
 
@@ -35,17 +38,18 @@ export default Vue.extend({
     };
   },
   methods: {
+    showFinishedMessage() {
+      this.$notify({
+        title: "終了しました",
+        message: "",
+      });
+    },
     async click(index: number) {
       this.putBoard(index);
       this.changePlayer();
 
-      console.log(this.$el.textContent);
-      await this.$nextTick();
-      console.log(this.$el.textContent);
-
       if (this.isFinishedGame()) {
-        alert("終了です");
-        this.resetGame();
+        this.showFinishedMessage();
       }
     },
     changePlayer() {
@@ -147,5 +151,9 @@ export default Vue.extend({
 
 #player {
   font-size: 24px;
+}
+
+#button {
+  margin-top: 50px;
 }
 </style>
