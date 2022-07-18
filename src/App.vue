@@ -4,7 +4,7 @@
       <router-link to="/one">1人で遊ぶ</router-link> |
       <router-link to="/two">2人で遊ぶ</router-link>
     </nav>
-    <router-view />
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 
