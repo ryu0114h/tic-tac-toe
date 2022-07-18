@@ -1,6 +1,6 @@
 # tic-tac-toe（三目並べ）
 
-# Image
+##  Image
 
 ## Project setup
 ```
