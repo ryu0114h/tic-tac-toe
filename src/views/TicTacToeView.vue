@@ -34,6 +34,11 @@ export default Vue.extend({
     ...mapState(["ticTacToeBoard", "player", "winner"]),
     ...mapGetters(["isFilledBoard"]),
   },
+  watch: {
+    ticTacToeBoard(old, n) {
+      console.log("watch", old, n);
+    },
+  },
   methods: {
     ...mapActions([
       "setTicTacToeBoard",
@@ -58,19 +63,19 @@ export default Vue.extend({
       }
 
       this.putBoard(index);
-
       if (await this.isFinishedGame()) {
         this.showFinishedMessage();
         return;
       }
 
-      if (this.$route.name === "one") {
-        await this.putRundomBoard();
+      if (this.$route.name === "two") {
+        return;
+      }
 
-        if (await this.isFinishedGame()) {
-          this.showFinishedMessage();
-          return;
-        }
+      await this.putRundomBoard();
+      if (await this.isFinishedGame()) {
+        this.showFinishedMessage();
+        return;
       }
     },
   },
