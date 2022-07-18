@@ -4,7 +4,10 @@
       <router-link to="/one">1人で遊ぶ</router-link> |
       <router-link to="/two">2人で遊ぶ</router-link>
     </nav>
-    <router-view :key="$route.fullPath" />
+    <router-view
+      v-loading="$store.state.isLoading"
+      element-loading-background="rgba(255, 255, 255, 0.5)"
+    />
   </div>
 </template>
 

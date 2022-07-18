@@ -7,6 +7,7 @@ type State = {
   ticTacToeBoard: (null | number)[][];
   player: number;
   winner: null | number;
+  isLoading: boolean;
 };
 
 const initializeState = () => {
@@ -18,6 +19,7 @@ const initializeState = () => {
     ],
     player: 1,
     winner: null,
+    isLoading: false,
   };
 };
 
@@ -39,6 +41,9 @@ export default new Vuex.Store({
     setWinner(state, payload) {
       state.winner = payload;
     },
+    setIsLoading(state, payload) {
+      state.isLoading = payload;
+    },
   },
   actions: {
     setTicTacToeBoard(context, payload) {
@@ -50,13 +55,16 @@ export default new Vuex.Store({
     setWinner(context, payload) {
       context.commit("setWinner", payload);
     },
+    setIsLoading(context, payload) {
+      context.commit("setIsLoading", payload);
+    },
     resetGame(context) {
-      context.commit("setTicTacToeBoard", initializeState().ticTacToeBoard);
-      context.commit("setPlayer", initializeState().player);
-      context.commit("setWinner", initializeState().winner);
+      context.dispatch("setTicTacToeBoard", initializeState().ticTacToeBoard);
+      context.dispatch("setPlayer", initializeState().player);
+      context.dispatch("setWinner", initializeState().winner);
     },
     changePlayer(context) {
-      context.commit("setPlayer", this.state.player === 1 ? 2 : 1);
+      context.dispatch("setPlayer", this.state.player === 1 ? 2 : 1);
     },
     isFinishedGame(context) {
       if (
@@ -64,21 +72,21 @@ export default new Vuex.Store({
         this.state.ticTacToeBoard[0][0] === this.state.ticTacToeBoard[0][1] &&
         this.state.ticTacToeBoard[0][0] === this.state.ticTacToeBoard[0][2]
       ) {
-        context.commit("setWinner", this.state.ticTacToeBoard[0][0]);
+        context.dispatch("setWinner", this.state.ticTacToeBoard[0][0]);
         return true;
       } else if (
         this.state.ticTacToeBoard[1][0] &&
         this.state.ticTacToeBoard[1][0] === this.state.ticTacToeBoard[1][1] &&
         this.state.ticTacToeBoard[1][0] === this.state.ticTacToeBoard[1][2]
       ) {
-        context.commit("setWinner", this.state.ticTacToeBoard[1][0]);
+        context.dispatch("setWinner", this.state.ticTacToeBoard[1][0]);
         return true;
       } else if (
         this.state.ticTacToeBoard[2][0] &&
         this.state.ticTacToeBoard[2][0] === this.state.ticTacToeBoard[2][1] &&
         this.state.ticTacToeBoard[2][0] === this.state.ticTacToeBoard[2][2]
       ) {
-        context.commit("setWinner", this.state.ticTacToeBoard[2][0]);
+        context.dispatch("setWinner", this.state.ticTacToeBoard[2][0]);
         return true;
       }
 
@@ -87,21 +95,21 @@ export default new Vuex.Store({
         this.state.ticTacToeBoard[0][0] === this.state.ticTacToeBoard[1][0] &&
         this.state.ticTacToeBoard[0][0] === this.state.ticTacToeBoard[2][0]
       ) {
-        context.commit("setWinner", this.state.ticTacToeBoard[0][0]);
+        context.dispatch("setWinner", this.state.ticTacToeBoard[0][0]);
         return true;
       } else if (
         this.state.ticTacToeBoard[0][1] &&
         this.state.ticTacToeBoard[0][1] === this.state.ticTacToeBoard[1][1] &&
         this.state.ticTacToeBoard[0][1] === this.state.ticTacToeBoard[2][1]
       ) {
-        context.commit("setWinner", this.state.ticTacToeBoard[0][1]);
+        context.dispatch("setWinner", this.state.ticTacToeBoard[0][1]);
         return true;
       } else if (
         this.state.ticTacToeBoard[0][2] &&
         this.state.ticTacToeBoard[0][2] === this.state.ticTacToeBoard[1][2] &&
         this.state.ticTacToeBoard[0][2] === this.state.ticTacToeBoard[2][2]
       ) {
-        context.commit("setWinner", this.state.ticTacToeBoard[0][2]);
+        context.dispatch("setWinner", this.state.ticTacToeBoard[0][2]);
         return true;
       }
 
@@ -110,19 +118,19 @@ export default new Vuex.Store({
         this.state.ticTacToeBoard[0][0] === this.state.ticTacToeBoard[1][1] &&
         this.state.ticTacToeBoard[0][0] === this.state.ticTacToeBoard[2][2]
       ) {
-        context.commit("setWinner", this.state.ticTacToeBoard[0][0]);
+        context.dispatch("setWinner", this.state.ticTacToeBoard[0][0]);
         return true;
       } else if (
         this.state.ticTacToeBoard[0][2] &&
         this.state.ticTacToeBoard[0][2] === this.state.ticTacToeBoard[1][1] &&
         this.state.ticTacToeBoard[0][2] === this.state.ticTacToeBoard[2][0]
       ) {
-        context.commit("setWinner", this.state.ticTacToeBoard[0][2]);
+        context.dispatch("setWinner", this.state.ticTacToeBoard[0][2]);
         return true;
       }
 
       if (this.getters.isFilledBoard()) {
-        context.commit("setWinner", null);
+        context.dispatch("setWinner", null);
         return true;
       }
 
@@ -133,23 +141,24 @@ export default new Vuex.Store({
       const columNum = payload % 3;
       const rowNum = Math.floor(payload / 3);
       newTicTacToeBoardValue[rowNum][columNum] = this.state.player;
-      context.commit("setTicTacToeBoard", this.state.ticTacToeBoard);
+      context.dispatch("setTicTacToeBoard", this.state.ticTacToeBoard);
       context.dispatch("changePlayer");
     },
     putRundomBoard(context) {
+      context.dispatch("setIsLoading", true);
       let nullIndex = -1;
       while (nullIndex < 0) {
         const ticTacToeBoardFlat = this.state.ticTacToeBoard.flat();
         const randomIndex = Math.floor(
           Math.random() * ticTacToeBoardFlat.length
         );
-        console.log(randomIndex);
         if (ticTacToeBoardFlat[randomIndex] === null) {
           nullIndex = randomIndex;
         }
       }
       setTimeout(() => {
         context.dispatch("putBoard", nullIndex);
+        context.dispatch("setIsLoading", false);
       }, 500);
     },
   },
