@@ -141,7 +141,7 @@ export default new Vuex.Store({
       const columNum = payload % 3;
       const rowNum = Math.floor(payload / 3);
       newTicTacToeBoardValue[rowNum][columNum] = this.state.player;
-      context.dispatch("setTicTacToeBoard", this.state.ticTacToeBoard);
+      context.dispatch("setTicTacToeBoard", newTicTacToeBoardValue);
       context.dispatch("changePlayer");
     },
     async putRundomBoard(context) {
