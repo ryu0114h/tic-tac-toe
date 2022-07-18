@@ -1,38 +1,45 @@
 <template>
-  <div>
-    <p id="player">Player {{ player }} の番です</p>
-    <div id="board">
-      <template v-for="(rows, i) in ticTacToeBoardValue">
-        <TicTacToeCell
-          :value="cell"
-          v-for="(cell, j) in rows"
-          :key="i * 3 + j"
-          :index="i * 3 + j"
-          @click="isFinishedGame() ? null : click($event)"
-        />
-      </template>
+  <div class="home">
+    <div>
+      <p id="player">Player {{ player }} の番です</p>
+      <div id="board">
+        <template v-for="(rows, i) in ticTacToeBoardValue">
+          <TicTacToeCell
+            :value="cell"
+            v-for="(cell, j) in rows"
+            :key="i * 3 + j"
+            :index="i * 3 + j"
+            @click="isFinishedGame() ? null : click($event)"
+          />
+        </template>
+      </div>
+      <el-button id="button" type="primary" size="medium" @click="resetGame"
+        >リセット</el-button
+      >
     </div>
-    <el-button id="button" type="primary" size="medium" @click="resetGame"
-      >リセット</el-button
-    >
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import TicTacToeCell from "./TicTacToeCell.vue";
+import TicTacToeCell from "../components/TicTacToeCell.vue";
+
+type DataType = {
+  ticTacToeBoardValue: (null | number)[][];
+  player: number;
+};
 
 export default Vue.extend({
   name: "TicTacToeBoard",
   components: {
     TicTacToeCell,
   },
-  data: function () {
+  data: function (): DataType {
     return {
       ticTacToeBoardValue: [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
       ],
       player: 1,
     };
@@ -130,10 +137,11 @@ export default Vue.extend({
     },
     resetGame() {
       this.ticTacToeBoardValue = [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
       ];
+      this.player = 1;
     },
   },
 });
