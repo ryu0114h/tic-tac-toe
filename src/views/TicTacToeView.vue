@@ -27,6 +27,7 @@ import TicTacToeCell from "../components/TicTacToeCell.vue";
 type DataType = {
   ticTacToeBoardValue: (null | number)[][];
   player: number;
+  winner: null | number;
 };
 
 export default Vue.extend({
@@ -42,12 +43,14 @@ export default Vue.extend({
         [null, null, null],
       ],
       player: 1,
+      winner: null,
     };
   },
   methods: {
     showFinishedMessage() {
+      const title = this.winner ? `勝者： Player ${this.winner}` : "引き分け";
       this.$notify({
-        title: "終了しました",
+        title,
         message: "",
       });
     },
@@ -79,18 +82,21 @@ export default Vue.extend({
         this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[0][1] &&
         this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[0][2]
       ) {
+        this.winner = this.ticTacToeBoardValue[0][0];
         return true;
       } else if (
         this.ticTacToeBoardValue[1][0] &&
         this.ticTacToeBoardValue[1][0] === this.ticTacToeBoardValue[1][1] &&
         this.ticTacToeBoardValue[1][0] === this.ticTacToeBoardValue[1][2]
       ) {
+        this.winner = this.ticTacToeBoardValue[1][0];
         return true;
       } else if (
         this.ticTacToeBoardValue[2][0] &&
         this.ticTacToeBoardValue[2][0] === this.ticTacToeBoardValue[2][1] &&
         this.ticTacToeBoardValue[2][0] === this.ticTacToeBoardValue[2][2]
       ) {
+        this.winner = this.ticTacToeBoardValue[2][0];
         return true;
       }
 
@@ -99,18 +105,21 @@ export default Vue.extend({
         this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[1][0] &&
         this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[2][0]
       ) {
+        this.winner = this.ticTacToeBoardValue[0][0];
         return true;
       } else if (
         this.ticTacToeBoardValue[0][1] &&
         this.ticTacToeBoardValue[0][1] === this.ticTacToeBoardValue[1][1] &&
         this.ticTacToeBoardValue[0][1] === this.ticTacToeBoardValue[2][1]
       ) {
+        this.winner = this.ticTacToeBoardValue[0][1];
         return true;
       } else if (
         this.ticTacToeBoardValue[0][2] &&
         this.ticTacToeBoardValue[0][2] === this.ticTacToeBoardValue[1][2] &&
         this.ticTacToeBoardValue[0][2] === this.ticTacToeBoardValue[2][2]
       ) {
+        this.winner = this.ticTacToeBoardValue[0][2];
         return true;
       }
 
@@ -119,12 +128,14 @@ export default Vue.extend({
         this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[1][1] &&
         this.ticTacToeBoardValue[0][0] === this.ticTacToeBoardValue[2][2]
       ) {
+        this.winner = this.ticTacToeBoardValue[0][0];
         return true;
       } else if (
         this.ticTacToeBoardValue[0][2] &&
         this.ticTacToeBoardValue[0][2] === this.ticTacToeBoardValue[1][1] &&
         this.ticTacToeBoardValue[0][2] === this.ticTacToeBoardValue[2][0]
       ) {
+        this.winner = this.ticTacToeBoardValue[0][2];
         return true;
       }
 
@@ -142,6 +153,7 @@ export default Vue.extend({
         [null, null, null],
       ];
       this.player = 1;
+      this.winner = null;
     },
   },
 });
