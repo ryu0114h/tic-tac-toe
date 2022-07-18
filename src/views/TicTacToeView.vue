@@ -65,7 +65,7 @@ export default Vue.extend({
       }
 
       if (this.$route.name === "one") {
-        this.putRundomBoard();
+        await this.putRundomBoard();
 
         if (await this.isFinishedGame()) {
           this.showFinishedMessage();

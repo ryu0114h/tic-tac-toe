@@ -144,7 +144,7 @@ export default new Vuex.Store({
       context.dispatch("setTicTacToeBoard", this.state.ticTacToeBoard);
       context.dispatch("changePlayer");
     },
-    putRundomBoard(context) {
+    async putRundomBoard(context) {
       context.dispatch("setIsLoading", true);
       let nullIndex = -1;
       while (nullIndex < 0) {
@@ -156,10 +156,9 @@ export default new Vuex.Store({
           nullIndex = randomIndex;
         }
       }
-      setTimeout(() => {
-        context.dispatch("putBoard", nullIndex);
-        context.dispatch("setIsLoading", false);
-      }, 500);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      context.dispatch("putBoard", nullIndex);
+      context.dispatch("setIsLoading", false);
     },
   },
   modules: {},
