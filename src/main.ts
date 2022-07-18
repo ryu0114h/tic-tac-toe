@@ -11,6 +11,11 @@ Vue.use(ElementUI);
 
 new Vue({
   router,
+  watch: {
+    $route() {
+      this.$store.dispatch("resetGame");
+    },
+  },
   store,
   render: (h) => h(App),
 }).$mount("#app");
